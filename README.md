@@ -18,6 +18,9 @@ composer require rescaled/simple-feature
 
 ## Usage
 
+### Define feature flags
+Feature flags are defined in your environment file. They must be defined in snake case as well as being prefixed with `FEATURE_`.
+
 ```dotenv
 FEATURE_FIRST_TEST=true
 FEATURE_SECOND_TEST=true
@@ -25,6 +28,9 @@ FEATURE_SECOND_TEST=true
 FEATURE_THIRD_TEST=false
 FEATURE_FOURTH_TEST=false
 ```
+
+### Direct usage
+You can directly access the package's methods as following.
 
 ```php
 SimpleFeature::enabled('firstTest') // true
@@ -34,6 +40,19 @@ SimpleFeature::allDisabled(['thirdTest', 'fourthTest']) // true
 SimpleFeature::allEnabled(['firstTest', 'thirdTest']) // false
 SimpleFeature::allDisabled(['firstTest', 'thirdTest']) // false
 ```
+
+### Middleware
+The package comes with two middlewares that allow to check whether a given set of features is enabled or disabled.
+
+```
+FEATURE_REGISTRATION=true
+FEATURE_ON_PREMISE=true
+
+Route::get('/register', [RegistrationController::class, 'create'])->middleware('feature.enabled:registration');
+Route::get('/billing', [BillingController, 'show'])->middleware('feature.disabled:onPremise');
+```
+
+If the feature hasn't the desired state the middleware will abort the request with a 404.
 
 ## Testing
 
