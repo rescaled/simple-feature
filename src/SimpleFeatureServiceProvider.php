@@ -3,6 +3,7 @@
 namespace Rescaled\SimpleFeature;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Blade;
 use Rescaled\SimpleFeature\Middleware\RequireDisabledFeature;
 use Rescaled\SimpleFeature\Middleware\RequireEnabledFeature;
 use Spatie\LaravelPackageTools\Package;
@@ -22,6 +23,7 @@ class SimpleFeatureServiceProvider extends PackageServiceProvider
         });
 
         $this->registerMiddleware();
+        $this->registerBladeDirectives();
     }
 
     public function registerMiddleware(): void
@@ -31,5 +33,12 @@ class SimpleFeatureServiceProvider extends PackageServiceProvider
 
         $router->aliasMiddleware('feature.enabled', RequireEnabledFeature::class);
         $router->aliasMiddleware('feature.disabled', RequireDisabledFeature::class);
+    }
+
+    public function registerBladeDirectives(): void
+    {
+        Blade::if('feature', function ($value) {
+            return \Rescaled\SimpleFeature\Facades\SimpleFeature::enabled($value);
+        });
     }
 }
