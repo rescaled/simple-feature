@@ -30,6 +30,7 @@ FEATURE_FOURTH_TEST=false
 ```
 
 ### Direct usage
+
 You can directly access the package's methods as following.
 
 ```php
@@ -42,17 +43,34 @@ SimpleFeature::allDisabled(['firstTest', 'thirdTest']) // false
 ```
 
 ### Middleware
+
 The package comes with two middlewares that allow to check whether a given set of features is enabled or disabled.
 
-```
-FEATURE_REGISTRATION=true
-FEATURE_ON_PREMISE=true
+```php
+// FEATURE_REGISTRATION=true
+// FEATURE_ON_PREMISE=true
 
 Route::get('/register', [RegistrationController::class, 'create'])->middleware('feature.enabled:registration');
 Route::get('/billing', [BillingController, 'show'])->middleware('feature.disabled:onPremise');
 ```
 
 If the feature hasn't the desired state the middleware will abort the request with a 404.
+
+### Blade
+
+Furthermore, you can use conditional Blade directives to render content based on the state of a given feature flag.
+
+```blade
+@feature('registration')
+    <a href="/register">Register</a>
+@endfeature
+```
+
+```blade
+@unlessfeature('onPremise')
+...
+@endunlessfeature
+```
 
 ## Testing
 
@@ -70,7 +88,7 @@ Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
-Please report security vulnerabilities directly to the maintainer. You can find contact information on their GitHub profile.
+If you discover any security-related issues, please email security@rescaled.de instead of using the issue tracker.
 
 ## Credits
 
