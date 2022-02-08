@@ -2,6 +2,10 @@
 
 All notable changes to `simple-feature` will be documented in this file.
 
+## v1.0.2 - 2022-02-08
+
+Adding support for Laravel 9
+
 ## v1.0.1 - 2022-01-18
 
 Adding Blade directive `@feature` to check for feature flags within Blade templates
